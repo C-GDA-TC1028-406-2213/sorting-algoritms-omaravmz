@@ -8,32 +8,116 @@
 namespace SortingAlgorithms {
 
 void bubbleSort(int arr[], int n) {
+    bool sorted = false;
+    int counter = 0;
+
+    do {
+        for (int i = 0; i < n - 1; i++) {
+            if (arr[i] > arr[i + 1]) {
+                int temporal = arr[i];
+                arr[i] = arr[i + 1];
+                arr[i + 1] = temporal;
+            }
+        }
+        counter++;
+        if (counter == n - 1) {
+            sorted = true;
+        }
+        
+    } while (!sorted);
     
 }
 
 void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n; i++){
+        int min = i;
+        
+        for (int j = i+1; j < n; j++){
+            if (arr[min] > arr[j]) min = j;
+        }
+        
+        int temporal = arr[i];
+        arr[i] = arr[min];
+        arr[min] = temporal;
+    }
     
 }
 
 void insertionSort(int arr[], int n) {
-    
+    for(int i = 1; i < n; i++){
+    int j = i;
+        
+        while (arr[j-1]>arr[j] && j > 0){
+            int temporal = arr[j-1];
+            arr[j-1] = arr[j];
+            arr[j] = temporal;
+            j--;
+        }
+    }
 }
 
 void merge(int arr[], int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    int arrA[n1], arrB[n2];
+
+    for (int n = 0; n < n1; n++) arrA[n] = arr[left + n];
+    for (int m = 0; m < n2; m++) arrB[m] = arr[mid + 1 + m];
     
+    int p1 = 0, p2 = 0, idx = left;
+    while (p1 < n1 && p2 < n2){
+        
+        if (arrA[p1] < arrB[p2]){
+            arr[idx++] = arrA[p1++];
+        } 
+        
+        else {
+            arr[idx++] = arrB[p2++];
+        }
+    }
+    
+    while (p1 < n1) arr[idx++] = arrA[p1++];
+    while (p2 < n2) arr[idx++] = arrB[p2++];
 }
 
 void mergeSort(int arr[], int left, int right) {
-    
+    if (left < right){
+        int mid = left + (right - left) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid+1, right);
+        merge(arr, left, mid, right);
+    }
 }
 
 int partition(int arr[], int low, int high) {
+    int pivot = arr[low];
+    int i = low, j = high;
     
-    return 0;
+    do {
+        while (arr[i] <= pivot) i++;
+        while (arr[j] > pivot) j--;
+        
+        if (i < j){
+            int temporal = arr[j];
+            arr[j] = arr[i]; 
+            arr[i] = temporal;
+        }
+        
+    } while (i < j);
+    
+    int temporal = arr[low];
+    arr[low] = arr[j]; 
+    arr[j] = temporal;
+    return j;
 }
 
 void quickSort(int arr[], int low, int high) {
-    
+    if (low < high) {
+        int j = partition(arr, low, high);
+        quickSort(arr, low, j - 1);   
+        quickSort(arr, j + 1, high);
+    }
 }
 
 void heapify(int arr[], int n, int i) {
